@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.js"
+        integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+
+    <title>Restful Request Webpage</title>
+    <style>
+        table {
+            width: 100%;
+        }
+
+        th,
+        td {
+            width: 45%;
+        }
+
+        form {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 style="padding-left: 4%;">Restful Request Webpage</h1>
+    &nbsp;
+    <div style="width: 90%; padding-left: 4%;">
+        <table>
+            <tr>
+                <h5>Request</h5>
+            </tr>
+            <tr>
+                <th scope="row" style="width: 18%;">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="addon-wrapping">Method</span>
+                        </div>
+                        <select class="form-control" id="method">
+                            <option>GET</option>
+                            <option>POST</option>
+                            <option>PUT</option>
+                            <option>PATCH</option>
+                            <option>DELETE</option>
+                        </select>
+                    </div>
+                </th>
+                <th scope="row" style="width: 80%;">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="addon-wrapping">URL</span>
+                        </div>
+                        <input type="email" class="form-control" id="url" placeholder="http(s)://www.example.com"
+                            value="http://192.168.0.192:8080">
+                    </div>
+
+                </th>
+                <th scope="row" style="width: 10%;">
+                    <div class="input-group mb-3">
+                        <button type="buttom" class="btn btn-primary" onclick="summit();">Submit</button>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th scope="row" colspan="1" style="width: 18%;">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Header</label>
+                        </div>
+                        <select class="custom-select" id="headerType">
+                            <option></option>
+                            <option>Content-Type</option>
+
+                        </select>
+                    </div>
+                </th>
+                <th scope="row" colspan="2">
+                    <div class="input-group mb-3">
+                        <select class="custom-select" id="headerContent">
+                            <option></option>
+                            <option>text/html; charset=utf-8</option>
+                            <option>application/json; charset=utf-8</option>
+                            <option>application/xml; charset=utf-8</option>
+                        </select>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th scope="row" colspan="3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="addon-wrapping">Body</span>
+
+                        <textarea class="form-control" id="body" rows="10"></textarea>
+                    </div>
+                </th>
+            </tr>
+        </table>
+        &nbsp;
+        <div>
+            <h5>Response</h5>
+            <textarea class="form-control" id="response" rows="10"></textarea>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script type="text/javascript">
+    function summit() {
+
+        var method = $('#method').val();
+        var headerType = $('#headerType').val();
+        var headerContent = $('#headerContent').val();
+        var vurl = $('#url').val();
+        var body = $('#body').val();
+        var jsonBody = '';
+        var result = '';
+
+        //alert(method + ', ' + headerType + headerContent + ', ' + url + ', ' + body);
+
+        if (body != '') {
+            body = body.replace(/\n/gi, '');
+            jsonBody = jsonParsing(body);
+            //alert(jsonBody);
+
+        }
+
+        // $.ajax({
+        // 	// "async": true,
+        // 	"crossDomain": true, 
+        // 	"url": vurl,
+        // 	"method": method,
+        // 	"headers": {
+        //         headerType: headerContent
+        // 	},
+        // 	// "processData": false,
+        //     "data": jsonBody,
+        //     "dataType": "json",
+        // }).then((data, textStatus, jqXHR) => {
+        //     console.log('통신성공!! '+textStatus, data);
+        //     $("#response").html(data);
+        // }, (jqXHR, textStatus, errorThrown) => {
+        //     alert('통신실패!! '+textStatus, errorThrown);
+        // })
+
+
+        var xhr;
+        if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+            xhr = new XMLHttpRequest();
+        } else { // code for IE6, IE5
+            xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xhr.open(method, vurl, true);
+
+        if (headerType != '' && headerType != '') {
+            xhr.setRequestHeader(headerType, headerContent)
+        }
+
+        try {
+            if (jsonBody != '') {
+                xhr.send(jsonBody)
+            } else {
+                xhr.send();
+            }
+        } catch (e) {
+            document.getElementById("response").innerHTML = e;
+        }
+
+
+        xhr.onprogress = function () {
+            console.log('LOADING: ', xhr.status);
+        };
+
+        xhr.onload = function () {
+            console.log('DONE: ', xhr.status);
+        };
+
+        xhr.onreadystatechange = function (e) {
+            // 이 함수는 Response가 클라이언트에 도달하면 호출된다.
+
+            // readyStates는 XMLHttpRequest의 상태(state)를 반환
+            // readyState: 4 => DONE(서버 응답 완료)
+            //if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+            // status는 response 상태 코드를 반환 : 200 => 정상 응답
+            if (xhr.status === 200 || xhr.status == 201) {
+                result = xhr.status + '\n';
+                result += xhr.statusText + '\n';
+                result += xhr.getAllResponseHeaders() + '\n';
+                result += xhr.responseText + '\n';
+                document.getElementById("response").innerHTML = result;
+            } else if (xhr.status == 0) {
+                result = 'CORS error or some the other error in connecting to the server...'
+                document.getElementById("response").innerHTML = result;
+            } else {
+                result = xhr.status + '\n';
+                result += xhr.statusText + '\n';
+                result += xhr.getAllResponseHeaders() + '\n';
+                result += xhr.responseText + '\n';
+                document.getElementById("response").innerHTML = result;
+            }
+        };
+    }
+
+    function jsonParsing(data) {
+        var jsonData = JSON.parse(data);
+        var jsonStr = JSON.stringify(jsonData)
+        // console.log(typeof jsonStr);
+        // console.log('body', jsonStr);
+
+        return jsonStr;
+    }
+</script>
